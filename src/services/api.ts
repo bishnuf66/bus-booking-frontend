@@ -3,7 +3,7 @@ import { getCookie } from '@/utils/cookieutil';
 
 // Create Axios instance
 const api = axios.create({
-  baseURL: '', // Use the /api path for internal API routes in Next.js
+  baseURL: 'http://localhost:8000', // Use the /api path for internal API routes in Next.js
 });
 
 // Add request interceptor

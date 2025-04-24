@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { User, Lock, Mail, X } from "lucide-react";
+import { User, Lock, Mail, X, Phone } from "lucide-react";
 import toast from "react-hot-toast";
 import { register } from "@/services/authService";
 
@@ -12,6 +12,7 @@ interface RegisterFormProps {
 const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
   const [name, setname] = useState<string>("");
   const [email, setEmail] = useState<string>("");
+  const [phone, setPhone] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [agreeTerms, setAgreeTerms] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
@@ -25,7 +26,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
 
     try {
       setLoading(true);
-      const data = await register(name, email, password);
+      const data = await register(name, email, password, phone);
 
       if (data.success === false) {
         toast.error(data.message);
@@ -67,7 +68,7 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
               type="text"
               required
               className="appearance-none rounded-none relative block w-full px-10 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-1 sm:text-sm"
-              placeholder="User Name"
+              placeholder="Full Name"
               value={name}
               onChange={(e) => setname(e.target.value)}
             />
@@ -91,6 +92,22 @@ const RegisterForm: React.FC<RegisterFormProps> = ({ onClose }) => {
             />
             <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
               <Mail className="h-5 w-5 text-gray-500" />
+            </div>
+          </div>
+
+          <div className="relative">
+            <input
+              id="phone"
+              name="phone"
+              type="number"
+              required
+              className="appearance-none rounded-none relative block w-full px-10 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-1 sm:text-sm"
+              placeholder="Phone Number"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+            />
+            <div className="absolute left-3 top-1/2 transform -translate-y-1/2">
+              <Phone className="h-5 w-5 text-gray-500" />
             </div>
           </div>
 

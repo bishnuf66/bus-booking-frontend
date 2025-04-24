@@ -6,8 +6,10 @@ import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { setCookie } from "@/utils/cookieutil";
 import { login } from "@/services/authService";
+import { useUserStore } from "@/store/userStore";
 
 const LoginForm: React.FC = () => {
+  const setUserFromToken = useUserStore((state) => state.setUserFromToken);
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
@@ -44,17 +46,15 @@ const LoginForm: React.FC = () => {
     try {
       setLoading(true);
       const data = await login(email, password);
-      console.log(data), "forn login";
       if (data.success === true) {
-        setCookie("email", data.user.email);
-        setCookie("name", data.user.name);
-        setCookie("id", data.user.id);
+        setCookie("token", data.token);
+        setUserFromToken();
         toast.success("Login successful!");
-        router.push("/dashboard");
+        router.push("/bus-booking");
       }
     } catch (error: any) {
       console.log(error);
-      toast.error("Login failed! " + error);
+      toast.error("Login failed! " + error?.response?.data.message);
     } finally {
       setLoading(false);
     }

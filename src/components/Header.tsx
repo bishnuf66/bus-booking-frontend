@@ -10,28 +10,31 @@ import {
   Settings,
   User,
   Bell,
-  ListTodo,
   LayoutDashboard,
+  BusFront,
 } from "lucide-react";
 import LogoutConfirmationModal from "./LogoutConfirmationModal";
+import { useUserStore } from "../store/userStore";
 
 const Header: React.FC = () => {
   const pathname = usePathname();
   if (pathname === "/login") return null;
+  const user = useUserStore((state) => state.user);
+  console.log(user, "user from header");
   const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [notificationOpen, setNotificationOpen] = useState(false);
   const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement | null>(null);
   const notificationRef = useRef<HTMLDivElement | null>(null);
-  const name = getCookie("name");
-  const email = getCookie("email");
+
+  const token = getCookie("token");
 
   const [mounted, setMounted] = useState(false);
 
   const handleLogout = () => {
-    deleteCookie("name");
-    deleteCookie("email");
+    deleteCookie("token");
+
     router.push("/login");
   };
 
@@ -50,7 +53,7 @@ const Header: React.FC = () => {
           {/* Logo and Brand */}
           <div className="flex items-center">
             <div className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white p-2 rounded-lg mr-3">
-              <ListTodo className="w-6 h-6" />
+              <BusFront className="w-6 h-6" />
             </div>
             <h1 className="text-xl font-bold bg-gradient-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
               <Link href="/"> Bus Booking</Link>
@@ -75,7 +78,7 @@ const Header: React.FC = () => {
             </div>
 
             {/* User Menu */}
-            {email ? (
+            {token ? (
               // ✅ Logged in user menu
               <div className="relative" ref={dropdownRef}>
                 <div
@@ -86,10 +89,12 @@ const Header: React.FC = () => {
                   }}
                 >
                   <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white flex items-center justify-center font-medium text-md shadow-sm">
-                    {name && name.charAt(0).toUpperCase()}
+                    {user && user.userName.charAt(0).toUpperCase()}
                   </div>
                   <span className="text-gray-700 font-medium capitalize hidden sm:flex items-center">
-                    <span className="max-w-[120px] truncate">{name}</span>
+                    <span className="max-w-[120px] truncate">
+                      {user?.userName}
+                    </span>
                     <ChevronDown className="w-4 h-4 ml-1 text-gray-500" />
                   </span>
                 </div>
@@ -98,9 +103,11 @@ const Header: React.FC = () => {
                   <div className="absolute right-0 mt-2 w-56 bg-white border border-gray-200 rounded-lg shadow-lg z-20 overflow-hidden">
                     <div className="p-4 border-b border-gray-100">
                       <p className="font-medium text-gray-800 capitalize">
-                        {name}
+                        {user?.userName}
                       </p>
-                      <p className="text-sm text-gray-500 truncate">{email}</p>
+                      <p className="text-sm text-gray-500 truncate">
+                        {user?.email}
+                      </p>
                     </div>
 
                     <div className="py-1">

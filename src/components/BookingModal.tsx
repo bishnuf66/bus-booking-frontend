@@ -1,4 +1,3 @@
-// components/BookingModal.tsx
 interface PassengerInfo {
   passengerName: string;
   phoneNumber: string;
@@ -10,9 +9,7 @@ interface BookingModalProps {
   onClose: () => void;
   selectedSeats: number[];
   passengerInfo: Record<number, PassengerInfo>;
-  setPassengerInfo: React.Dispatch<
-    React.SetStateAction<Record<number, PassengerInfo>>
-  >;
+  setPassengerInfo: any;
   onSubmit: () => void;
   isSubmitting: boolean;
 }
@@ -33,7 +30,7 @@ export default function BookingModal({
     field: keyof PassengerInfo,
     value: string
   ) => {
-    setPassengerInfo((prev) => ({
+    setPassengerInfo((prev: any) => ({
       ...prev,
       [seatNumber]: {
         ...prev[seatNumber],
